@@ -6,7 +6,7 @@ DynamicArray<T>::DynamicArray() {
     this->size = 0;
     this->capacity = 2;
     this->allocBegin = new T[this->capacity];
-    this->data = this->allocBegin + (this->capacity / 4 + 1);
+    this->data = this->allocBegin + 1;
     this->allocEnd = this->allocBegin + this->capacity;
 }
 
@@ -28,7 +28,7 @@ DynamicArray<T>::DynamicArray( const DynamicArray<T>& source ) {
     this->allocEnd = this->allocBegin + this->capacity;
 
     for ( int index = 0; index < this->size; index++ ) {
-        this->data[index] = source.data[index];
+        this[index] = source[index];
     }
 }
 
@@ -43,7 +43,7 @@ DynamicArray<T>& DynamicArray<T>::operator=( const DynamicArray<T>& source ) {
         this->data = this->allocBegin + (source.data - source.allocBegin);
         this->allocEnd = this->allocBegin + this->capacity;
         for ( int index = 0; index < this->size; index++ ) {
-            this->data[index] = source.data[index];
+            this[index] = source[index];
         }
     }
     return *this;
@@ -85,108 +85,91 @@ DynamicArray<T>& DynamicArray<T>::operator=( DynamicArray<T>&& source ) {
 
 template <typename T>
 DynamicArray<T>::~DynamicArray() {
-    delete[] this->data;
+    delete[] this->allocBegin;
 }
 
 template <typename T>
-ResultInfo<void> DynamicArray<T>::append( const T& value ) {
+void DynamicArray<T>::append( const T& value ) {
     int sizeDiff = 1;
-    ResultInfo<void> resizeStatus = ResultInfo<int>
-        ::Value( sizeDiff )
-        .Map( [this](int x) { return this->extend(x); });
-
-    if ( resizeStatus.IsOk() ) {
-        this->data[this->size - 1] = value;
-        return ResultInfo<void>::Value();
-    } else {
-        return resizeStatus;
+    try {
+        this->extend( sizeDiff );
+        this[this->size - 1] = value;
+        this->
+    } catch( std::bad_alloc &ex ) {
+        throw Exception::Exception(ex);
     }
 }
 
 template <typename T>
-ResultInfo<void> DynamicArray<T>::prepend( const T& value ) {
+void DynamicArray<T>::prepend( const T& value ) {
     int sizeDiff = 1;
-    ResultInfo<void> resizeStatus = ResultInfo<int>
-        ::Value( sizeDiff )
-        .Map( [this](int x) { return this->extend(x); });
-
-    if ( resizeStatus.IsOk() ) {
+    try {
+        this->extend( sizeDiff );
         this->data--;
-        *(this->data) = value;
-        return ResultInfo<void>::Value();
-    } else {
-        return resizeStatus;
+        this[0] = value;
+    } catch( std::bad_alloc &ex ) {
+        throw Exception::Exception(ex);
     }
 }
 
 template <typename T>
-ResultInfo<void> DynamicArrat<T>::insertAt( const T& value, int pos ) {
-    if ( index < 0 || index > this.size ) {
-        return ResultInfo<void>::Error( Exception(ErrorCode::INDEX_OUT_OF_BOUNDS) );
+void DynamicArray<T>::insertAt( const T& value, int pos ) {
+    if ( pos < 0 || pos > this.size ) {
+        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
     int sizeDiff = 1;
-    ResultInfo<void> resizeStatus = ResultInfo<int>
-        ::Value( sizeDiff )
-        .Map( [this](int x) { return this->extend(x); });
-
-    if ( resizeStatus.IsOk() ) {
-        for ( size_t index = this->size; index > pos; index--) {
-            this->data[index] = this->data[index - 1];
+    try {
+        this->extend( sizeDiff );
+        for ( int index = pos; index < this->size; index++ ) {
+            this[index + 1] = this[index];
         }
-        this->data[pos] = value;
-        return ResultInfo<void>::Value();
-    } else {
-        return resizeStatus;
+        this[pos] = value;
+    } catch ( std::bad_alloc &ex ) {
+        throw Exception::Exception(ex);
     }
 }
 
 template <typename T>
-ResultInfo<void> DynamicArray<T>::setAt( T& value, int index ) {
-    if ( index < 0 || index > this.size ) {
-        return ResultInfo<void>::Error( Exception(ErrorCode::INDEX_OUT_OF_BOUNDS) );
+void DynamicArray<T>::setAt( T& value, int pos ) {
+    if ( pos < 0 || pos > this.size ) {
+        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
-    this->data[index] = value;
-    return ResultInfo<void>::Value();
+    this->data[pos] = value;
 }
 
 template <typename T>
-void DynamicArray<T>::pop( int pos ) {
-    if (index >= this->size) {
-        return ResultInfo<void>::Error( Exception(ErrorCode::INDEX_OUT_OF_BOUNDS) );
+void DynamicArray<T>::removeAt( int pos ) {
+    if ( pos < 0 || pos > this.size ) {
+        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
-    if (this->size == 0) {
-        return ResultInfo<void>::Error( Exception(ErrorCode::EMPTY_ARRAY) );
-    }
-    int sizeDiff = this->getSize();
-    ResultInfo<void> resizeStatus = ResultInfo<int>
-        ::Value( sizeDiff )
-        .Map( [this](int x) { return this->shrink(x); });
-
-    if resizeStatus.IsOk() {
-        for (size_t index = pos; index < this->size - 1; index++) {
-            this->data[index] = this->data[index + 1];
+    int sizeDiff = 1;
+    try {
+        T temp;
+        for ( int index = pos; index < this->size - 1; index++ ) {
+            temp = this[index];
+            this[index] = this[index + 1];
+            this[index + 1] = temp;
         }
-        return ResultInfo<void>::Value();
-    } else {
-        return resizeStatus;
+        shrink( sizeDiff );
+    } catch ( std::bad_alloc &ex ) {
+        throw Exception::Exception(ex);
     }
 }
 
 template <typename T>
-ResultInfo<void> DynamicArray<T>::swap( int first, int second ) {
+void DynamicArray<T>::swap( int first, int second ) {
     if ( first < 0 || first > this->size || second < 0 || second > this->size ) {
-        return ResultInfo<void>::Error( Exception(ErrorCode::INDEX_OUT_OF_BOUNDS) );
+        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
     T temp = this->data[first];
     this->data[first] = this->data[second];
     this->data[second] = temp;
-    return ResultInfo<void>::Value();
 }
 
 template <typename T>
-ResultInfo<void> DynamicArray<T>::extend( int sizeDiff ) {
+void DynamicArray<T>::extend( int sizeDiff ) {
     if ( sizeDiff < 0 ) {
-        return ResultInfo<void>::Error( Exception(ErrorCode::NEGATIVE_SIZE_DIFFERENCE) );
+        throw Exception::Exception( Exception::ErrorCode::NEGATIVE_SIZE_DIFFERENCE );
     }
 
     this->size += sizeDiff;
@@ -201,33 +184,32 @@ ResultInfo<void> DynamicArray<T>::extend( int sizeDiff ) {
             ? newCapacity + 1000
             : newCapacity;
     }
-
-    if ( newCapacity != this->capacity ) {
-        T* newAllocBegin = new T[newCapacity];
-        T* newData = newAllocBegin + (newCapacity / 4 + 1);
-        T* newAllocEnd = newAllocBegin + newCapacity;
-        for ( int index = 0; index < this->size; index++ ) {
-            newData[index] = this->data[index];
+    try {
+        if ( newCapacity != this->capacity ) {
+            T* newAllocBegin = new T[newCapacity];
+            T* newData = newAllocBegin + (newCapacity / 4 + 1);
+            T* newAllocEnd = newAllocBegin + newCapacity;
+            for ( int index = 0; index < this->size; index++ ) {
+                newData[index] = this->data[index];
+            }
+            this->capacity = newCapacity;
+            this->allocBegin = newAllocBegin;
+            this->data = newData;
+            this->allocEnd = newAllocEnd;    
         }
+        delete[] this->allocBegin; 
+    } catch( std::bad_alloc &ex ) {
+        throw Exception::Exception(ex);
     }
-    delete[] this->allocBegin;
-
-    this->capacity = newCapacity;
-    this->allocBegin = newAllocBegin;
-    this->data = newData;
-    this->allocEnd = newAllocEnd;    
-
-    
-    return ResultInfo<void>::Value();
 }
 
 template <typename T>
-ResultInfo<void> DynamicArray<T>::shrink( int sizeDiff ) {
+void DynamicArray<T>::shrink( int sizeDiff ) {
     if ( sizeDiff < 0 ) {
-        return ResultInfo<void>::Error( Exception(ErrorCode::NEGATIVE_SIZE_DIFFERENCE) );
+        throw Exception::Exception( Exception::ErrorCode::NEGATIVE_SIZE_DIFFERENCE );
     }
 
-    this->size -= sizeDiff;
+    this->size += sizeDiff;
     int newCapacity = this->capacity;
 
     if ( newCapacity < 10000 ) {
@@ -239,39 +221,54 @@ ResultInfo<void> DynamicArray<T>::shrink( int sizeDiff ) {
             ? newCapacity - 1000
             : newCapacity;
     }
-
-    if ( newCapacity != this->capacity ) {
-        T* newAllocBegin = new T[newCapacity];
-        T* newData = newAllocBegin + (newCapacity / 4 + 1);
-        T* newAllocEnd = newAllocBegin + newCapacity;
-        for ( int index = 0; index < this->size; index++ ) {
-            newData[index] = this->data[index];
+    try {
+        if ( newCapacity != this->capacity ) {
+            T* newAllocBegin = new T[newCapacity];
+            T* newData = newAllocBegin + (newCapacity / 4 + 1);
+            T* newAllocEnd = newAllocBegin + newCapacity;
+            for ( int index = 0; index < this->size; index++ ) {
+                newData[index] = this->data[index];
+            }
+            this->capacity = newCapacity;
+            this->allocBegin = newAllocBegin;
+            this->data = newData;
+            this->allocEnd = newAllocEnd;    
         }
+        delete[] this->allocBegin; 
+    } catch( std::bad_alloc &ex ) {
+        throw Exception::Exception(ex);
     }
-    delete[] this->allocBegin;
-
-    this->capacity = newCapacity;
-    this->allocBegin = newAllocBegin;
-    this->data = newData;
-    this->allocEnd = newAllocEnd;
-
-    return ResultInfo<void>::Value();
 }
 
 template <typename T>
 T& DynamicArray<T>::operator[]( int index ) {
     if ( index < 0 || index >= this->size ) {
-        throw Exception(ErrorCode::INDEX_OUT_OF_BOUNDS);
+        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
     return this->data[index];
 }
 
 template <typename T>
-int DynamicArray<T>::getSize() {
+void DynamicArray<T>::clear() {
+    this->size = 0;
+    this->capacity = 2;
+    delete[] this->allocBegin;
+    this->allocBegin = new T[this->capacity];
+    this->data = this->allocBegin + (this->capacity / 4 + 1);
+    this->allocEnd = this->allocBegin + this->capacity;
+}
+
+template <typename T>
+int DynamicArray<T>::getSize() const {
     return this->size;
 }
 
 template <typename T>
-int DynamicArray<T>::getCapacity() {
+int DynamicArray<T>::getCapacity() const {
     return this->capacity;
+}
+
+template <typename T>
+bool DynamicArray<T>::isEmpty() const {
+    return this->size == 0;
 }

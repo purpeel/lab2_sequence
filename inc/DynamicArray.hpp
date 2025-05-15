@@ -10,31 +10,32 @@ public:
     DynamicArray();
     DynamicArray( int capacity );
 
-    DynamicArray( const DynamicArray<T>& source );
-    DynamicArray<T>& operator=( const DynamicArray<T>& source );
+    DynamicArray( const DynamicArray<T>& src );
+    DynamicArray<T>& operator=( const DynamicArray<T>& src );
     
-    DynamicArray( DynamicArray<T>&& source);
-    DynamicArray<T>& operator=( DynamicArray<T>&& source );
+    DynamicArray( DynamicArray<T>&& src);
+    DynamicArray<T>& operator=( DynamicArray<T>&& src );
     
     virtual ~DynamicArray();
 public:
     void append( const T& value );
     void prepend( const T& value );
-    void setAt( T& value, int index );
-    void insertAt( const T& value, int index );
-    void pop( int index );
-    void swap( int index1, int index2 );
-
+    void setAt( T& value, int pos );
+    void insertAt( const T& value, int pos );
+    void removeAt( int pos );
+    void swap( int pos1, int pos2 );
+private:
     void extend( int sizeDiff );
     void shrink( int sizeDiff );
 public:
-    T& operator[]( int index );
-    const T& operator[]( int index ) const;
+    T& operator[]( int pos );
+    const T& operator[]( int pos ) const;
 public:
     int getSize() const;
-    int getCapacity() const;
     bool isEmpty() const;
 private:
+    int getCapacity() const;
+    virtual void clear();
     T* allocBegin;
     T* data;
     T* allocEnd;
@@ -43,5 +44,5 @@ private:
 };
 
 
-#include "DynamicArray.tpp"
+#include "../tmpl/DynamicArray.tpp"
 #endif
