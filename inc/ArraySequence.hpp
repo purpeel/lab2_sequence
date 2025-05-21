@@ -35,6 +35,5 @@ private:
     DynamicArray<T> array;
 };
 
-#include "../tmpl/ArraySequence.tpp"
-
-#endif
+#include "../src/tmpl/ArraySequence.tpp"
+#endif // ARRAYSEQ_H

@@ -29,8 +29,10 @@ public:
 public:
     const bool isEmpty() const override;
     const int getSize() const override;
+
 private:
     LinkedList<T> list;
 }
 
-#endif //LISTSEQ
+#include "../src/tmpl/ListSequence.tpp"
+#endif // LISTSEQ_H

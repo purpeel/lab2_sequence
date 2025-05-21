@@ -94,9 +94,8 @@ void DynamicArray<T>::append( const T& value ) {
     try {
         this->extend( sizeDiff );
         this[this->size - 1] = value;
-        this->
     } catch( std::bad_alloc &ex ) {
-        throw Exception::Exception(ex);
+        throw Exception(ex);
     }
 }
 
@@ -108,14 +107,14 @@ void DynamicArray<T>::prepend( const T& value ) {
         this->data--;
         this[0] = value;
     } catch( std::bad_alloc &ex ) {
-        throw Exception::Exception(ex);
+        throw Exception(ex);
     }
 }
 
 template <typename T>
 void DynamicArray<T>::insertAt( const T& value, int pos ) {
     if ( pos < 0 || pos > this.size ) {
-        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
     int sizeDiff = 1;
     try {
@@ -125,14 +124,14 @@ void DynamicArray<T>::insertAt( const T& value, int pos ) {
         }
         this[pos] = value;
     } catch ( std::bad_alloc &ex ) {
-        throw Exception::Exception(ex);
+        throw Exception(ex);
     }
 }
 
 template <typename T>
 void DynamicArray<T>::setAt( T& value, int pos ) {
     if ( pos < 0 || pos > this.size ) {
-        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
     this->data[pos] = value;
 }
@@ -140,7 +139,7 @@ void DynamicArray<T>::setAt( T& value, int pos ) {
 template <typename T>
 void DynamicArray<T>::removeAt( int pos ) {
     if ( pos < 0 || pos > this.size ) {
-        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
     int sizeDiff = 1;
     try {
@@ -152,14 +151,14 @@ void DynamicArray<T>::removeAt( int pos ) {
         }
         shrink( sizeDiff );
     } catch ( std::bad_alloc &ex ) {
-        throw Exception::Exception(ex);
+        throw Exception(ex);
     }
 }
 
 template <typename T>
 void DynamicArray<T>::swap( int first, int second ) {
     if ( first < 0 || first > this->size || second < 0 || second > this->size ) {
-        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
     T temp = this->data[first];
     this->data[first] = this->data[second];
@@ -169,7 +168,7 @@ void DynamicArray<T>::swap( int first, int second ) {
 template <typename T>
 void DynamicArray<T>::extend( int sizeDiff ) {
     if ( sizeDiff < 0 ) {
-        throw Exception::Exception( Exception::ErrorCode::NEGATIVE_SIZE_DIFFERENCE );
+        throw Exception( Exception::ErrorCode::NEGATIVE_SIZE_DIFFERENCE );
     }
 
     this->size += sizeDiff;
@@ -199,14 +198,14 @@ void DynamicArray<T>::extend( int sizeDiff ) {
         }
         delete[] this->allocBegin; 
     } catch( std::bad_alloc &ex ) {
-        throw Exception::Exception(ex);
+        throw Exception(ex);
     }
 }
 
 template <typename T>
 void DynamicArray<T>::shrink( int sizeDiff ) {
     if ( sizeDiff < 0 ) {
-        throw Exception::Exception( Exception::ErrorCode::NEGATIVE_SIZE_DIFFERENCE );
+        throw Exception( Exception::ErrorCode::NEGATIVE_SIZE_DIFFERENCE );
     }
 
     this->size += sizeDiff;
@@ -236,14 +235,14 @@ void DynamicArray<T>::shrink( int sizeDiff ) {
         }
         delete[] this->allocBegin; 
     } catch( std::bad_alloc &ex ) {
-        throw Exception::Exception(ex);
+        throw Exception(ex);
     }
 }
 
 template <typename T>
 T& DynamicArray<T>::operator[]( int index ) {
     if ( index < 0 || index >= this->size ) {
-        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
     return this->data[index];
 }

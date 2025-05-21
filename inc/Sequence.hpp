@@ -7,13 +7,13 @@ template <typename T>
 class Sequence 
 {
 public:
-    virtual Sequence() = 0;
+    Sequence() = 0;
     
-    virtual Sequence( const Sequence<T>& src ) = 0;
-    virtual Sequence<T> operator=( const Sequence<T>& src ) = 0;
+    Sequence( const Sequence<T>& src ) = 0;
+    Sequence<T> operator=( const Sequence<T>& src ) = 0;
 
-    virtual Sequence( const Sequence<T>&& src ) = 0;
-    virtual Sequence<T> operator=( const Sequence<T>&& src ) = 0;
+    Sequence( const Sequence<T>&& src ) = 0;
+    Sequence<T> operator=( const Sequence<T>&& src ) = 0;
 
     virtual ~Sequence() = 0;
 public:
@@ -31,6 +31,4 @@ public:
     virtual const int getSize() const;
 };
 
-#include "../tmpl/Sequence.tpp"
-
-#endif
+#endif // SEQUENCE_H

@@ -3,36 +3,35 @@
 
 #include <cstdlib>
 #include <exception>
+#include <string>
 
 class Exception : public std::exception
 {
 private:
     std::string message;
-    std::exception& ex;
-    void throwSelf() {
-        throw this->ex;
-    }
+    std::exception ex;
 public:
     enum class ErrorCode {
         SUCCESS = 0,
+        INVALID_TYPE = 1,
         UNEXPECTED_NULLPTR = 2,
         UNEXPECTED_CHAR = 3,
         INDEX_OUT_OF_BOUNDS = 4,
         EMPTY_ARRAY = 5,
         NEGATIVE_SIZE_DIFFERENCE = 6
     };
-    Exception( std::exception ex ) : {
+public:
+    explicit Exception( std::exception& ex ) : ex(ex) {
         this->ex = ex;
-        this->throwSelf();
-        catch( std::bad_alloc& ex ) {
+        try {
+            throw ex;
+        } catch( std::bad_alloc& ex ) {
             this->message = "Error. Unable to allocate memory.";
-        }
-
-        catch( ... ) {
+        } catch( ... ) {
             this->message = "Unknown error.";
         }
     }
-    Exception( ErrorCode code ) : {
+    explicit Exception( ErrorCode code ) {
         this->ex = std::exception();
         switch ( code ) {
         case ErrorCode::SUCCESS:
@@ -53,6 +52,9 @@ public:
         case ErrorCode::NEGATIVE_SIZE_DIFFERENCE:
             this->message = "Error. Size difference cannot be negative.";
             break;
+        case ErrorCode::INVALID_TYPE:
+            this->message = "Error. Invalid type.";
+            break;
         default:
             this->message = "Unknown error.";
             break;
@@ -62,9 +64,6 @@ public:
     const char* what() const noexcept override {
         return this->message.c_str();
     }
-    ErrorCode getCode() const noexcept {
-        return this->code;
-    }
 };
 
-#endif
+#endif // UTILITY_H

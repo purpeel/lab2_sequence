@@ -44,5 +44,5 @@ private:
 };
 
 
-#include "../tmpl/DynamicArray.tpp"
-#endif
+#include "../src/tmpl/DynamicArray.tpp"
+#endif // DYNAMIC_ARRAY_H

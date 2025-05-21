@@ -42,5 +42,5 @@ private:
     int size;
 }
 
-#include "../tmpl/LinkedList.tpp"
-#endif
+#include "../src/tmpl/LinkedList.tpp"
+#endif // LINKEDLIST_H
