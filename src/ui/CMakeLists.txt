@@ -6,7 +6,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
@@ -17,7 +17,7 @@ set(TS_FILES untitled_ru_RU.ts)
 set(PROJECT_SOURCES
     main.cpp
     mainwindow.cpp
-    ${CMAKE_SOURCE_DIR}/inc/mainwindow.hpp
+    ${CMAKE_SOURCE_DIR}/inc/ui/mainwindow.hpp
     mainwindow.ui
     ${TS_FILES}
     translations.qrc
@@ -58,7 +58,8 @@ set_target_properties(ui_app PROPERTIES
 
 # Include directories
 target_include_directories(ui_app PRIVATE 
-    ${CMAKE_SOURCE_DIR}/inc
+    ${CMAKE_SOURCE_DIR}/inc/tmplInc
+    ${CMAKE_SOURCE_DIR}/inc/ui
     ${CMAKE_SOURCE_DIR}/src/tmpl
 )
 

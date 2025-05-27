@@ -8,7 +8,7 @@ class DynamicArray
 {
 public:
     DynamicArray();
-    DynamicArray( int capacity );
+    DynamicArray( const int capacity );
 
     DynamicArray( const DynamicArray<T>& src );
     DynamicArray<T>& operator=( const DynamicArray<T>& src );
@@ -17,25 +17,27 @@ public:
     DynamicArray<T>& operator=( DynamicArray<T>&& src );
     
     virtual ~DynamicArray();
+    virtual void clear();
 public:
     void append( const T& value );
     void prepend( const T& value );
-    void setAt( T& value, int pos );
+    void setAt( const T& value, const int pos );
     void insertAt( const T& value, int pos );
-    void removeAt( int pos );
-    void swap( int pos1, int pos2 );
+    void removeAt( const int pos );
+    void swap( const int pos1, const int pos2 );
 private:
-    void extend( int sizeDiff );
-    void shrink( int sizeDiff );
+    void extend( const int sizeDiff );
+    void shrink( const int sizeDiff );
 public:
-    T& operator[]( int pos );
-    const T& operator[]( int pos ) const;
+    T& operator[]( const int pos );
+    const T& operator[]( const int pos ) const;
 public:
     int getSize() const;
     bool isEmpty() const;
+public:
+    const std::string print() const;
 private:
     int getCapacity() const;
-    virtual void clear();
     T* allocBegin;
     T* data;
     T* allocEnd;
@@ -44,5 +46,5 @@ private:
 };
 
 
-#include "../src/tmpl/DynamicArray.tpp"
+#include "../../src/tmpl/DynamicArray.tpp"
 #endif // DYNAMIC_ARRAY_H

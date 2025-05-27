@@ -1,5 +1,5 @@
 #include <cstdlib>
-#include "../inc/DynamicArray.hpp"
+#include "../inc/tmplInc/DynamicArray.hpp"
 
 
 int main( int argc, char** argv ) {

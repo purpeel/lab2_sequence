@@ -3,10 +3,14 @@
 
 #include <QMainWindow>
 #include <QListWidgetItem>
+#include <QMetaType>
 #include <vector>
-#include "Sequence.hpp"
-#include "SequenceWrap.hpp"
+#include "Wrapper.hpp"
+#include "ICollection.hpp"
+#include "ArraySequence.hpp"
+#include "ListSequence.hpp"
 
+Q_DECLARE_METATYPE(SequenceTuple)
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -31,23 +35,14 @@ private slots:
     void on_setAtBtn_clicked();
     void on_insertAtBtn_clicked();
     void on_swapBtn_clicked();
-    void on_varType_currentIndexChanged(int index);
-    void on_containerType_currentIndexChanged(int index);
+    // void on_copyBtn_clicked();
+    // void on_isImmutable_checked();
+    // void on_varType_currentIndexChanged(int index);
+    // void on_containerType_currentIndexChanged(int index);
 private:
     Ui::MainWindow *ui;
-    std::vector<ICollection> sequences;
     void updateUI();
-    void showError( const QString& message );
-    enum class ContainerType
-    {
-        LinkedList,
-        Array
-    };
-    enum class VarType
-    {
-        Int,
-        Double
-    };
+    void showError( const std::exception &ex );
 };
 
 #endif // MAINWINDOW_H

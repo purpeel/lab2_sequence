@@ -9,13 +9,22 @@ class ListSequence : public Sequence<T>
 {
 public:
     ListSequence();
-    ListSequence( const int size );
 
     ListSequence( const LinkedList<T>& src );
-    ListSequence<T> operator=( const ListSequence<T>& src );
+    ListSequence( const ListSequence<T>& src );
+    ListSequence<T>& operator=( const LinkedList<T>& src );
+    ListSequence<T>& operator=( const ListSequence<T>& src );
 
     ListSequence( LinkedList<T>&& src );
-    ListSequence<T> operator=( LinkedList<T>&& src );
+    ListSequence( ListSequence<T>&& src );
+    ListSequence<T>& operator=( LinkedList<T>&& src );
+    ListSequence<T>& operator=( ListSequence<T>&& src );
+
+    Sequence<T>* clone() const override;
+
+    void copy( const Sequence<T>& src ) override;
+    void clear() override;
+    virtual ~ListSequence();
 public:
     void append( const T& value ) override;
     void prepend( const T& value ) override;
@@ -29,10 +38,11 @@ public:
 public:
     const bool isEmpty() const override;
     const int getSize() const override;
-
+public:
+    const std::string print() const override;
 private:
     LinkedList<T> list;
-}
+};
 
-#include "../src/tmpl/ListSequence.tpp"
+#include "../../src/tmpl/ListSequence.tpp"
 #endif // LISTSEQ_H

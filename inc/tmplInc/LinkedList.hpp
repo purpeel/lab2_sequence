@@ -12,10 +12,11 @@ public:
     LinkedList( const LinkedList<T>& src );
     LinkedList<T>& operator=( const LinkedList<T>& src );
 
-    LinkedList( LinkedList<T>&& src ) noexcept;
-    LinkedList<T>& operator=( LinkedList<T>&& src ) noexcept;
+    LinkedList( LinkedList<T>&& src );
+    LinkedList<T>& operator=( LinkedList<T>&& src );
 
     virtual ~LinkedList();
+    virtual void clear();
 public:
     void append( const T& value );
     void prepend( const T& value );
@@ -29,18 +30,19 @@ public:
 public:
     const int getSize() const;
     const bool isEmpty() const;
+public:
+    const std::string print() const;
 private:
-    virtual void clear();
-    Node& getNode( const int pos );
     struct Node {
         T value;
         Node* next;
         Node* prev;
     };
+    Node* getNode( const int pos );
     Node* head;
     Node* tail;
     int size;
-}
+};
 
-#include "../src/tmpl/LinkedList.tpp"
+#include "../../src/tmpl/LinkedList.tpp"
 #endif // LINKEDLIST_H

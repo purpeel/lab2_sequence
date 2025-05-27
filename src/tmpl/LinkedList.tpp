@@ -4,7 +4,7 @@
 template <typename T>
 LinkedList<T>::LinkedList() {
     this->size = 0;
-    this->head = this->tail = nullptr
+    this->head = this->tail = nullptr;
 }
 
 template <typename T>
@@ -12,10 +12,10 @@ LinkedList<T>::LinkedList( const LinkedList<T>& source ) {
     Node* current = source.head;
     while ( current != nullptr ) {
         try {
-            this->append( current->value )
+            this->append( current->value );
             current = current->next;
         } catch ( std::bad_alloc& ex ) {
-            throw Exception::Exception(ex);
+            throw Exception(ex);
         }
     }
 }
@@ -35,25 +35,25 @@ LinkedList<T>& LinkedList<T>::operator=( const LinkedList<T>& source ) {
 }
 
 template <typename T>
-LinkedList<T>::LinkedList( LinkedList<T>&& source ) noexcept {
-    this->size = source.count;
+LinkedList<T>::LinkedList( LinkedList<T>&& source ) {
+    this->size = source.size;
     this->head = source.head;
     this->tail = source.tail;
 
-    source.count = 0;
+    source.size = 0;
     source.head = source.tail = nullptr;
 }
 
 template <typename T>
-LinkedList<T>& LinkedList<T>::operator=( LinkedList<T>&& source ) noexcept {
+LinkedList<T>& LinkedList<T>::operator=( LinkedList<T>&& source ){
     if ( this == &source ) { return *this; }
     this->clear();
 
-    this->size = source.count;
+    this->size = source.size;
     this->head = source.head;
     this->tail = source.tail;
 
-    source.count = 0;
+    source.size = 0;
     source.head = source.tail = nullptr;
     
     return *this;
@@ -65,8 +65,8 @@ LinkedList<T>::~LinkedList() {
 }
 
 template <typename T>
-void LinkedList<T>::clear() override {
-    if ( !this.isEmpty() ) {
+void LinkedList<T>::clear() {
+    if ( !this->isEmpty() ) {
         Node *current = this->head;
         while ( current->next != nullptr ) {
             current = current->next;
@@ -95,7 +95,7 @@ void LinkedList<T>::append( const T& value ) {
             this->size++;
         }
     } catch ( std::bad_alloc& ex ) {
-        throw Exception::Exception(ex);
+        throw Exception(ex);
     }
 }
 
@@ -112,17 +112,18 @@ void LinkedList<T>::prepend( const T& value ) {
             newElem->next = this->head;
             newElem->prev = nullptr;
             this->head->prev = newElem;
+            this->head = newElem;
             this->size++;
         }
     } catch ( std::bad_alloc& ex ) {
-        throw Exception::Exception(ex);
+        throw Exception(ex);
     }
 }
 
 template <typename T>
-void LinkedList<T>::setAt( T& value, const int pos ) {
+void LinkedList<T>::setAt( const T& value, const int pos ) {
     if ( pos < 0 || pos >= this->size ) {
-        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
     Node* current = this->head;
     for ( int index = 0; index < pos; index++ ) {
@@ -134,14 +135,14 @@ void LinkedList<T>::setAt( T& value, const int pos ) {
 template <typename T>
 void LinkedList<T>::insertAt( const T& value, const int pos ) {
     if ( pos < 0 || pos > this->size ) {
-        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     } else if ( pos == 0 ) {
         prepend( value );
     } else if ( pos == this->size ) {
         append( value );
     } else {
         Node* current = this->head;
-        for ( int index = 1; index < pos; index++ ) {
+        for ( int index = 0; index < pos; index++ ) {
             current = current->next;
         }
         Node* prev = current->prev;
@@ -159,14 +160,26 @@ void LinkedList<T>::insertAt( const T& value, const int pos ) {
 template <typename T>
 void LinkedList<T>::pop( const int pos ) {
     if ( pos < 0 || pos >= this->size ) {
-        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
-    Node* current = this->head;
+    Node* current = head;
     for ( int index = 0; index < pos; index++ ) {
         current = current->next;
     }
-    current->prev->next = current->next;
-    current->next->prev = current->prev;
+
+    if ( size == 1) {
+        head = tail = nullptr;
+    } else if ( current == head ) {
+        head = head->next;
+        head->prev = nullptr;
+    } else if ( current == tail ) {
+        tail = tail->prev;
+        tail->next = nullptr;
+    } else {
+        current->prev->next = current->next;
+        current->next->prev = current->prev;
+    }
+    delete current;
     this->size--;
 }
 
@@ -188,7 +201,7 @@ void LinkedList<T>::swap( const int pos1, const int pos2 ) {
 template <typename T>
 T& LinkedList<T>::operator[]( const int pos ) {
     if ( pos < 0 || pos >= this->size ) {
-        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
     Node* current = this->head;
     for ( int index = 0; index < pos; index++ ) {
@@ -201,7 +214,7 @@ T& LinkedList<T>::operator[]( const int pos ) {
 template <typename T>
 const T& LinkedList<T>::operator[](const int pos ) const {
     if ( pos < 0 || pos >= this->size ) {
-        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
     Node* current = this->head;
     for ( int index = 0; index < pos; index++ ) {
@@ -212,23 +225,33 @@ const T& LinkedList<T>::operator[](const int pos ) const {
 }
 
 template <typename T>
-const int LinkedList<T>::getSize() {
+const int LinkedList<T>::getSize() const {
     return this->size;
 }
 
 template <typename T>
-const bool LinkedList<T>::isEmpty() {
+const bool LinkedList<T>::isEmpty() const {
     return this->size == 0;
 }
 
 template <typename T>
-Node& LinkedList<T>::getNode( const int pos ) {
+typename LinkedList<T>::Node* LinkedList<T>::getNode( const int pos ) {
     if ( pos < 0 || pos >= this->size ) {
-        throw Exception::Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
     Node* current = this->head;
     for ( int index = 0; index < pos; index++ ) {
         current = current->next;
     }
-    return *current;
+    return current;
+}
+
+template <typename T>
+const std::string LinkedList<T>::print() const {
+    std::string result = "{";
+    for ( int index = 0; index < this->size; index++ ) {
+        result += std::to_string( this->operator[](index) ) + " ";
+    }
+    result += "}";
+    return result;
 }
