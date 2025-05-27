@@ -33,12 +33,22 @@ public:
     void removeAt( const int pos ) override;
     void setAt( const T& value, const int pos ) override;
     void swap( const int pos1, const int pos2 ) override;
+    Sequence<T>* getSubSequence( const int startIndex, const int endIndex ) const override;
+    Sequence<T>* concat( const Sequence<T>& other ) override;
 public:
     T& operator[]( const int pos ) override;
     const T& operator[]( const int pos ) const override;
-    public:
+public:
     const bool isEmpty() const override;
     const int getSize() const override;
+public:
+    Sequence<T>* appendImmutable( const T& value ) const override;
+    Sequence<T>* prependImmutable( const T& value ) const override;
+    Sequence<T>* insertAtImmutable( const T& value, const int pos ) const override;
+    Sequence<T>* removeAtImmutable( const int pos ) const override;
+    Sequence<T>* setAtImmutable( const T& value, const int pos ) const override;
+    Sequence<T>* swapImmutable( const int pos1, const int pos2 ) const override;
+    Sequence<T>* concatImmutable( const Sequence<T>& other ) const override;
 public:
     const std::string print() const override;
 private:

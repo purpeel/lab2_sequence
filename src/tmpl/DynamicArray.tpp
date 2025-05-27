@@ -180,13 +180,13 @@ void DynamicArray<T>::removeAt( const int pos ) {
 }
 
 template <typename T>
-void DynamicArray<T>::swap( const int first, const int second ) {
-    if ( first < 0 || first > this->size || second < 0 || second > this->size ) {
+void DynamicArray<T>::swap( const int pos1, const int pos2 ) {
+    if ( pos1 < 0 || pos1 >= this->size || pos2 < 0 || pos2 >= this->size ) {
         throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
     }
-    T temp = this->data[first];
-    this->data[first] = this->data[second];
-    this->data[second] = temp;
+    T temp = this->data[pos1];
+    this->data[pos1] = this->data[pos2];
+    this->data[pos2] = temp;
 }
 
 template <typename T>
@@ -264,6 +264,39 @@ void DynamicArray<T>::shrink( const  int sizeDiff ) {
 }
 
 template <typename T>
+DynamicArray<T>* DynamicArray<T>::subArray( const int startIndex, const int endIndex ) const {
+    if (   startIndex < 0 || endIndex < 0 ||
+    startIndex > endIndex || startIndex >= this->getSize() || endIndex >= this->getSize() ) {
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+    }
+    try {
+        DynamicArray<T>* res = new DynamicArray<T>(endIndex - startIndex);
+        for ( int index = 0; index < endIndex - startIndex; index++ ) {
+            (*res)[index] = (*this)[index + startIndex];
+        }
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+DynamicArray<T>* DynamicArray<T>::concat( const DynamicArray<T>& other ) {
+    try {
+        DynamicArray<T>* res = new DynamicArray<T>(this->size + other.size);
+        for ( int index = 0; index < this->size; index++ ) {
+            (*res)[index] = (*this)[index];
+        }
+        for ( int index = 0; index < other.size; index++ ) {
+            (*res)[this->size + index] = other[index];
+        }
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
 T& DynamicArray<T>::operator[]( const int index ) {
     if ( index < 0 || index >= this->size ) {
         throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
@@ -312,4 +345,59 @@ const std::string DynamicArray<T>::print() const {
 template <typename T>
 bool DynamicArray<T>::isEmpty() const {
     return this->size == 0;
+}
+
+template <typename T>
+DynamicArray<T>* DynamicArray<T>::appendImmutable( const T& value ) const {
+    try {
+        DynamicArray<T>* res = new DynamicArray<T>(*this);
+        res->append( value );
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+DynamicArray<T>* DynamicArray<T>::prependImmutable( const T& value ) const {
+    try {
+        DynamicArray<T>* res = new DynamicArray<T>(*this);
+        res->prepend( value );
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+DynamicArray<T>* DynamicArray<T>::insertAtImmutable( const T& value, const int pos ) const {
+    try {
+        DynamicArray<T>* res = new DynamicArray<T>(*this);
+        res->insertAt( value, pos );
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+DynamicArray<T>* DynamicArray<T>::removeAtImmutable( const int pos ) const {
+    try {
+        DynamicArray<T>* res = new DynamicArray<T>(*this);
+        res->removeAt(pos);
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+DynamicArray<T>* DynamicArray<T>::setAtImmutable( const T& value, const int pos ) const {
+    try {
+        DynamicArray<T>* res = new DynamicArray<T>(*this);
+        res->setAt( value, pos );
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
 }

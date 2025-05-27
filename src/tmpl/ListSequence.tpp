@@ -130,6 +130,35 @@ void ListSequence<T>::swap( const int pos1, const int pos2 ) {
 }
 
 template <typename T>
+Sequence<T>* ListSequence<T>::getSubSequence( const int startIndex, const int endIndex ) const {
+    if (   startIndex < 0 || endIndex < 0 ||
+    startIndex > endIndex || startIndex >= this->getSize() || endIndex >= this->getSize() ) {
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+    }
+    try {
+        ListSequence<T>* res = new ListSequence<T>();
+        for ( int index = startIndex; index < endIndex; index++ ) {
+            res->append( (*this)[index] );
+        }
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+Sequence<T>* ListSequence<T>::concat( const Sequence<T>& other ) {
+    try {
+        for ( int index = 0; index < other.getSize(); index++ ) {
+            this->append( other[index] );
+        }
+        return this;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
 T& ListSequence<T>::operator[](const int pos) {
     try {
         return this->list[pos];
@@ -155,6 +184,73 @@ const bool ListSequence<T>::isEmpty() const {
 template <typename T>
 const int ListSequence<T>::getSize() const {
     return this->list.getSize();
+}
+
+template <typename T>
+Sequence<T>* ListSequence<T>::appendImmutable( const T& value ) const {
+    try {
+        return new ListSequence<T>(this->list.appendImmutable(value));
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+Sequence<T>* ListSequence<T>::prependImmutable( const T& value ) const {
+    try {
+        return new ListSequence<T>(this->list.prependImmutable(value));
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+Sequence<T>* ListSequence<T>::insertAtImmutable( const T& value, const int pos ) const {
+    try {
+        return new ListSequence<T>(this->list.insertAtImmutable(value, pos));
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+Sequence<T>* ListSequence<T>::removeAtImmutable( const int pos ) const {
+    try {
+        return new ListSequence<T>(this->list.popImmutable(pos));
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+Sequence<T>* ListSequence<T>::setAtImmutable( const T& value, const int pos ) const {
+    try {
+        return new ListSequence<T>(this->list.setAtImmutable(value, pos));
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+Sequence<T>* ListSequence<T>::swapImmutable(const int pos1, const int pos2) const {
+    try {
+        return new ListSequence<T>(this->list.swapImmutable(pos1, pos2));
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+Sequence<T>* ListSequence<T>::concatImmutable( const Sequence<T>& other ) const {
+    try {
+        ListSequence<T>* res = new ListSequence<T>(*this);
+        for ( int index = 0; index < other.getSize(); index++ ) {
+            res->append( other[index] );
+        }
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
 }
 
 template <typename T>

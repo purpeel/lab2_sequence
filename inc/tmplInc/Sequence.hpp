@@ -22,7 +22,7 @@ public:
     virtual void removeAt( const int pos ) = 0;
     virtual void setAt( const T& value, const int pos ) = 0;
     virtual void swap( const int pos1, const int pos2 ) = 0;
-    virtual Sequence<T>* getSubSequence( const int startIndex, const int endIndex ) = 0;
+    virtual Sequence<T>* getSubSequence( const int startIndex, const int endIndex ) const = 0;
     virtual Sequence<T>* concat( const Sequence<T>& other ) = 0;
 public:
     virtual T& operator[]( const int pos ) = 0;
@@ -32,15 +32,14 @@ public:
     virtual const int getSize() const = 0;
 public: 
     virtual const std::string print() const = 0;
-// public: // immutable functions
-    // virtual void appendImmutable( const T& value ) = 0;
-    // virtual void prependImmutable( const T& value ) = 0;
-    // virtual void insertAtImmutable( const T& value, const int pos ) = 0;
-    // virtual void removeAtImmutable( const int pos ) = 0;
-    // virtual void setAtImmutable( const T& value, const int pos ) = 0;
-    // virtual void swapImmutable( const int pos1, const int pos2 ) = 0;
-    // virtual Sequence<T>* getSubSequenceImmutable( const int startIndex, const int endIndex ) const = 0;
-    // virtual Sequence<T>* concatImmutable( const Sequence<T>& other ) const = 0;
+public: // immutable functions
+    virtual Sequence<T>* appendImmutable( const T& value ) = 0;
+    virtual Sequence<T>* prependImmutable( const T& value ) = 0;
+    virtual Sequence<T>* insertAtImmutable( const T& value, const int pos ) = 0;
+    virtual Sequence<T>* removeAtImmutable( const int pos ) = 0;
+    virtual Sequence<T>* setAtImmutable( const T& value, const int pos ) = 0;
+    virtual Sequence<T>* swapImmutable( const int pos1, const int pos2 ) = 0;
+    virtual Sequence<T>* concatImmutable( const Sequence<T>& other ) const = 0;
 };
 
 enum SequenceType

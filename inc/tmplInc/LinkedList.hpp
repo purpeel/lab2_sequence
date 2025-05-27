@@ -24,12 +24,22 @@ public:
     void insertAt( const T& value, const int pos );
     void pop( const int pos );
     void swap( const int pos1, const int pos2 );
+    LinkedList<T>* subList( const int startIndex, const int endIndex ) const;
+    LinkedList<T>* concat( const LinkedList<T>& other );
 public:
     T& operator[]( const int pos );
     const T& operator[]( const int pos ) const;
 public:
     const int getSize() const;
     const bool isEmpty() const;
+public:
+    LinkedList<T>* appendImmutable( const T& value ) const override;
+    LinkedList<T>* prependImmutable( const T& value ) const override;
+    LinkedList<T>* insertAtImmutable( const T& value, const int pos ) const override;
+    LinkedList<T>* popImmutable( const int pos ) const override;
+    LinkedList<T>* setAtImmutable( const T& value, const int pos ) const override;
+    LinkedList<T>* swapImmutable( const int pos1, const int pos2 ) const override;
+    LinkedList<T>* concatImmutable( const LinkedList<T>& other ) const override;
 public:
     const std::string print() const;
 private:

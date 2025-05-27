@@ -68,7 +68,7 @@ template <typename T>
 void LinkedList<T>::clear() {
     if ( !this->isEmpty() ) {
         Node *current = this->head;
-        while ( current->next != nullptr ) {
+        while ( current->next ) {
             current = current->next;
             delete( current->prev );
         }
@@ -192,10 +192,39 @@ void LinkedList<T>::swap( const int pos1, const int pos2 ) {
     elem1->next->prev = elem1->prev->next = elem2;
     elem2->next->prev = elem2->prev->next = elem1;
 
-    elem1->next = elem2->next;
-    elem1->prev = elem2->prev;
-    elem2->next = temp.next;
-    elem2->prev = temp.prev;
+    if ( elem1->next ) elem1->next = elem2->next;
+    if ( elem1->prev ) elem1->prev = elem2->prev;
+    if ( elem2->next ) elem2->next = temp.next;
+    if ( elem2->prev ) elem2->prev = temp.prev;
+}
+
+template <typename T>
+LinkedList<T>* LinkedList<T>::subList( const int startIndex, const int endIndex ) const {
+    if (   startIndex < 0 || endIndex < 0 ||
+    startIndex > endIndex || startIndex >= this->getSize() || endIndex >= this->getSize() ) {
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+    }
+    try {
+        LinkedList<T>* res = new LinkedList<T>();
+        for ( int index = startIndex; index < endIndex; index++ ) {
+            res->append( (*this)[index] );
+        }
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+LinkedList<T>* LinkedList<T>::concat( const LinkedList<T>& other ) {
+    try {
+        for ( int index = 0; index < other.getSize(); index++ ) {
+            this->append( other[index] );
+        }
+        return this;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
 }
 
 template <typename T>
@@ -234,6 +263,82 @@ const bool LinkedList<T>::isEmpty() const {
     return this->size == 0;
 }
 
+template <typename T>
+LinkedList<T>* LinkedList<T>::appendImmutable( const T& value ) const {
+    try {
+        LinkedList<T>* res = new LinkedList<T>(*this);
+        res->append( value );
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+LinkedList<T>* LinkedList<T>::prependImmutable( const T& value ) const {
+    try {
+        LinkedList<T>* res = new LinkedList<T>(*this);
+        res->prepend( value );
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+LinkedList<T>* LinkedList<T>::insertAtImmutable( const T& value, const int pos ) const {
+    try {
+        LinkedList<T>* res = new LinkedList<T>(*this);
+        res->insertAt( value, pos );
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+LinkedList<T>* LinkedList<T>::popImmutable( const int pos ) const {
+    try {
+        LinkedList<T>* res = new LinkedList<T>(*this);
+        res->pop(pos);
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+LinkedList<T>* LinkedList<T>::setAtImmutable( const T& value, const int pos ) const {
+    try {
+        LinkedList<T>* res = new LinkedList<T>(*this);
+        res->setAt( value, pos );
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+LinkedList<T>* LinkedList<T>::swapImmutable(const int pos1, const int pos2) const {
+    try {
+        LinkedList<T>* res = new LinkedList<T>(*this);
+        res->swap(pos1, pos2);
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+LinkedList<T>* LinkedList<T>::concatImmutable( const LinkedList<T>& other ) const {
+    try {
+        LinkedList<T>* res = new LinkedList<T>(*this);
+        res->concat(other);
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
 template <typename T>
 typename LinkedList<T>::Node* LinkedList<T>::getNode( const int pos ) {
     if ( pos < 0 || pos >= this->size ) {

@@ -25,6 +25,8 @@ public:
     void insertAt( const T& value, int pos );
     void removeAt( const int pos );
     void swap( const int pos1, const int pos2 );
+    DynamicArray<T>* subArray( const int startIndex, const int endIndex ) const;
+    DynamicArray<T>* concat( const DynamicArray<T>& other );
 private:
     void extend( const int sizeDiff );
     void shrink( const int sizeDiff );
@@ -34,6 +36,14 @@ public:
 public:
     int getSize() const;
     bool isEmpty() const;
+public:
+    DynamicArray<T>* appendImmutable( const T& value ) const override;
+    DynamicArray<T>* prependImmutable( const T& value ) const override;
+    DynamicArray<T>* insertAtImmutable( const T& value, const int pos ) const override;
+    DynamicArray<T>* removeAtImmutable( const int pos ) const override;
+    DynamicArray<T>* setAtImmutable( const T& value, const int pos ) const override;
+    DynamicArray<T>* swapImmutable( const int pos1, const int pos2 ) const override;
+    DynamicArray<T>* concatImmutable( const DynamicArray<T>& other ) const override;
 public:
     const std::string print() const;
 private:
