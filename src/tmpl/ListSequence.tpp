@@ -189,7 +189,7 @@ const int ListSequence<T>::getSize() const {
 template <typename T>
 Sequence<T>* ListSequence<T>::appendImmutable( const T& value ) const {
     try {
-        return new ListSequence<T>(this->list.appendImmutable(value));
+        return new ListSequence<T>(*this->list.appendImmutable(value));
     } catch ( Exception& ex ) {
         throw Exception(ex);
     }
@@ -198,7 +198,7 @@ Sequence<T>* ListSequence<T>::appendImmutable( const T& value ) const {
 template <typename T>
 Sequence<T>* ListSequence<T>::prependImmutable( const T& value ) const {
     try {
-        return new ListSequence<T>(this->list.prependImmutable(value));
+        return new ListSequence<T>(*this->list.prependImmutable(value));
     } catch ( Exception& ex ) {
         throw Exception(ex);
     }
@@ -207,7 +207,7 @@ Sequence<T>* ListSequence<T>::prependImmutable( const T& value ) const {
 template <typename T>
 Sequence<T>* ListSequence<T>::insertAtImmutable( const T& value, const int pos ) const {
     try {
-        return new ListSequence<T>(this->list.insertAtImmutable(value, pos));
+        return new ListSequence<T>(*this->list.insertAtImmutable(value, pos));
     } catch ( Exception& ex ) {
         throw Exception(ex);
     }
@@ -216,7 +216,7 @@ Sequence<T>* ListSequence<T>::insertAtImmutable( const T& value, const int pos )
 template <typename T>
 Sequence<T>* ListSequence<T>::removeAtImmutable( const int pos ) const {
     try {
-        return new ListSequence<T>(this->list.popImmutable(pos));
+        return new ListSequence<T>(*this->list.popImmutable(pos));
     } catch ( Exception& ex ) {
         throw Exception(ex);
     }
@@ -225,7 +225,7 @@ Sequence<T>* ListSequence<T>::removeAtImmutable( const int pos ) const {
 template <typename T>
 Sequence<T>* ListSequence<T>::setAtImmutable( const T& value, const int pos ) const {
     try {
-        return new ListSequence<T>(this->list.setAtImmutable(value, pos));
+        return new ListSequence<T>(*this->list.setAtImmutable(value, pos));
     } catch ( Exception& ex ) {
         throw Exception(ex);
     }
@@ -234,7 +234,7 @@ Sequence<T>* ListSequence<T>::setAtImmutable( const T& value, const int pos ) co
 template <typename T>
 Sequence<T>* ListSequence<T>::swapImmutable(const int pos1, const int pos2) const {
     try {
-        return new ListSequence<T>(this->list.swapImmutable(pos1, pos2));
+        return new ListSequence<T>(*this->list.swapImmutable(pos1, pos2));
     } catch ( Exception& ex ) {
         throw Exception(ex);
     }

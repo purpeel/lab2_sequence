@@ -333,8 +333,7 @@ template <typename T>
 LinkedList<T>* LinkedList<T>::concatImmutable( const LinkedList<T>& other ) const {
     try {
         LinkedList<T>* res = new LinkedList<T>(*this);
-        res->concat(other);
-        return res;
+        return res->concat(other);
     } catch ( Exception& ex ) {
         throw Exception(ex);
     }

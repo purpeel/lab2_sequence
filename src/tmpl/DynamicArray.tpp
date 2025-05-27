@@ -401,3 +401,24 @@ DynamicArray<T>* DynamicArray<T>::setAtImmutable( const T& value, const int pos 
         throw Exception(ex);
     }
 }
+
+template <typename T>
+DynamicArray<T>* DynamicArray<T>::swapImmutable(const int pos1, const int pos2) const {
+    try {
+        DynamicArray<T>* res = new DynamicArray<T>(*this);
+        res->swap(pos1, pos2);
+        return res;
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}
+
+template <typename T>
+DynamicArray<T>* DynamicArray<T>::concatImmutable( const DynamicArray<T>& other ) const {
+    try {
+        DynamicArray<T>* res = new DynamicArray<T>(*this);
+        return res->concat(other);
+    } catch ( Exception& ex ) {
+        throw Exception(ex);
+    }
+}

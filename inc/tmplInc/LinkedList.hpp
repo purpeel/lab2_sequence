@@ -33,13 +33,13 @@ public:
     const int getSize() const;
     const bool isEmpty() const;
 public:
-    LinkedList<T>* appendImmutable( const T& value ) const override;
-    LinkedList<T>* prependImmutable( const T& value ) const override;
-    LinkedList<T>* insertAtImmutable( const T& value, const int pos ) const override;
-    LinkedList<T>* popImmutable( const int pos ) const override;
-    LinkedList<T>* setAtImmutable( const T& value, const int pos ) const override;
-    LinkedList<T>* swapImmutable( const int pos1, const int pos2 ) const override;
-    LinkedList<T>* concatImmutable( const LinkedList<T>& other ) const override;
+    LinkedList<T>* appendImmutable( const T& value ) const;
+    LinkedList<T>* prependImmutable( const T& value ) const;
+    LinkedList<T>* insertAtImmutable( const T& value, const int pos ) const;
+    LinkedList<T>* popImmutable( const int pos ) const;
+    LinkedList<T>* setAtImmutable( const T& value, const int pos ) const;
+    LinkedList<T>* swapImmutable( const int pos1, const int pos2 ) const;
+    LinkedList<T>* concatImmutable( const LinkedList<T>& other ) const;
 public:
     const std::string print() const;
 private:

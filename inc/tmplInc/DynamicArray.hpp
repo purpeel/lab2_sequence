@@ -37,13 +37,13 @@ public:
     int getSize() const;
     bool isEmpty() const;
 public:
-    DynamicArray<T>* appendImmutable( const T& value ) const override;
-    DynamicArray<T>* prependImmutable( const T& value ) const override;
-    DynamicArray<T>* insertAtImmutable( const T& value, const int pos ) const override;
-    DynamicArray<T>* removeAtImmutable( const int pos ) const override;
-    DynamicArray<T>* setAtImmutable( const T& value, const int pos ) const override;
-    DynamicArray<T>* swapImmutable( const int pos1, const int pos2 ) const override;
-    DynamicArray<T>* concatImmutable( const DynamicArray<T>& other ) const override;
+    DynamicArray<T>* appendImmutable( const T& value ) const;
+    DynamicArray<T>* prependImmutable( const T& value ) const;
+    DynamicArray<T>* insertAtImmutable( const T& value, const int pos ) const;
+    DynamicArray<T>* removeAtImmutable( const int pos ) const;
+    DynamicArray<T>* setAtImmutable( const T& value, const int pos ) const;
+    DynamicArray<T>* swapImmutable( const int pos1, const int pos2 ) const;
+    DynamicArray<T>* concatImmutable( const DynamicArray<T>& other ) const;
 public:
     const std::string print() const;
 private:
