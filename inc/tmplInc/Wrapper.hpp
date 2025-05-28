@@ -59,6 +59,20 @@ public:
 
         return tuple;
     }
+    
+    template <typename T>
+    static ICollectionTuple<Sequence, int, double>* enwrap( Sequence<T>* seq )
+    {
+        auto tuple = new ICollectionTuple<Sequence, int, double>();
+
+        ICollection *iSeq = new ISequence<T>(seq);
+        iSeq->defineType<T>();
+
+        tuple->set(seq);
+        tuple->setCollection(iSeq);
+
+        return tuple;
+    }
 };
 
 using SequenceTuple = ICollectionTuple<Sequence, int, double>*;

@@ -35,12 +35,12 @@ private slots:
     void on_setAtBtn_clicked();
     void on_insertAtBtn_clicked();
     void on_swapBtn_clicked();
-    // void on_copyBtn_clicked();
-    // void on_isImmutable_checked();
-    // void on_varType_currentIndexChanged(int index);
-    // void on_containerType_currentIndexChanged(int index);
+    void on_copyBtn_clicked();
+    void on_concatBtn_clicked();
+    void on_subSeqBtn_clicked();
 private:
     Ui::MainWindow *ui;
+    void addToList( ICollectionTuple<Sequence, int, double>& tuple );
     void updateUI();
     void showError( const std::exception &ex );
 };

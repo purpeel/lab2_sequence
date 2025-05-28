@@ -272,7 +272,7 @@ DynamicArray<T>* DynamicArray<T>::subArray( const int startIndex, const int endI
     try {
         DynamicArray<T>* res = new DynamicArray<T>(endIndex - startIndex);
         for ( int index = 0; index < endIndex - startIndex; index++ ) {
-            (*res)[index] = (*this)[index + startIndex];
+            res->append((*this)[index + startIndex]);
         }
         return res;
     } catch ( Exception& ex ) {

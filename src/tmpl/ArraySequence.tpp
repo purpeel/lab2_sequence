@@ -143,7 +143,7 @@ void ArraySequence<T>::swap( const int pos1, const int pos2 ) {
 template <typename T>
 Sequence<T>* ArraySequence<T>::getSubSequence( const int startIndex, const int endIndex ) const {
     try {
-        return new ArraySequence<T>(* this->array.subArray(startIndex, endIndex) );
+        return new ArraySequence<T>( *this->array.subArray(startIndex, endIndex) );
     } catch ( Exception& ex ) {
         throw Exception(ex);
     }

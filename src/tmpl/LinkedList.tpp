@@ -9,10 +9,13 @@ LinkedList<T>::LinkedList() {
 
 template <typename T>
 LinkedList<T>::LinkedList( const LinkedList<T>& source ) {
+    this->size = 0;
+    this->head = this->tail = nullptr;
     Node* current = source.head;
-    while ( current != nullptr ) {
+    while ( current ) {
         try {
             this->append( current->value );
+            if ( !current->next ) { break; }
             current = current->next;
         } catch ( std::bad_alloc& ex ) {
             throw Exception(ex);
@@ -185,17 +188,19 @@ void LinkedList<T>::pop( const int pos ) {
 
 template <typename T>
 void LinkedList<T>::swap( const int pos1, const int pos2 ) {
-    Node* elem1 = this->getNode( pos1 );
-    Node* elem2 = this->getNode( pos2 );
-    Node temp = *elem1;
+    if (pos1 < 0 || pos2 < 0 || pos1 >= this->size || pos2 >= this->size) {
+        throw Exception( Exception::ErrorCode::INDEX_OUT_OF_BOUNDS );
+    } else if ( pos1 == pos2 ) {
+        return;
+    }
 
-    elem1->next->prev = elem1->prev->next = elem2;
-    elem2->next->prev = elem2->prev->next = elem1;
+    T value1 = (*this)[pos1];
+    T value2 = (*this)[pos2];
 
-    if ( elem1->next ) elem1->next = elem2->next;
-    if ( elem1->prev ) elem1->prev = elem2->prev;
-    if ( elem2->next ) elem2->next = temp.next;
-    if ( elem2->prev ) elem2->prev = temp.prev;
+    this->pop(pos1);
+    this->insertAt( value2, pos1 );
+    this->pop(pos2);
+    this->insertAt( value1, pos2 );
 }
 
 template <typename T>
